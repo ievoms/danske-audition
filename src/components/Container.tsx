@@ -8,6 +8,7 @@ export const Container = styled.div<{
   display: flex;
   flex-direction: ${({ row }) => (row ? "row" : "column")};
   align-items: ${({ alignLeft }) => (alignLeft ? "left" : "center")};
+
   gap: 50px;
   overflow-x: ${({ horizontalScroll }) =>
     horizontalScroll ? "scroll" : "hidden"};

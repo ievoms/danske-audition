@@ -3,6 +3,7 @@ import { PeopleType } from "../utils/types"
 import { Container } from "./Container"
 import { Text } from "./Typography"
 import styled from "@emotion/styled"
+import { Loading } from "./Loading"
 
 const Table = styled.table`
   width: 100%;
@@ -29,18 +30,24 @@ interface PeopleBlockProps {
   filmId?: string
   filmTitle: string
   people: PeopleType[]
+  loadingTitle: boolean
+  loadingPeople: boolean
 }
 export const PeopleBlock = ({
   filmId,
   filmTitle,
   people,
+  loadingTitle,
+  loadingPeople,
 }: PeopleBlockProps) => {
   return (
     <>
       {filmId ? (
         <Container>
-          <Text bold>{filmTitle}</Text>
-          {!!people.length && (
+          {loadingTitle ? <Loading /> : <Text bold>{filmTitle}</Text>}
+          {loadingPeople ? (
+            <Loading />
+          ) : (
             <Table>
               <THead>
                 <Th>Name</Th>
