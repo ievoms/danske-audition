@@ -19,6 +19,10 @@ const router = createBrowserRouter([
     path: ROUTE_FILMS,
     element: <Films />,
   },
+  {
+    path: `${ROUTE_FILMS}/:id`,
+    element: <Films />,
+  },
 ])
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

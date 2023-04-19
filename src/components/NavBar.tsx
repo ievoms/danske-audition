@@ -1,9 +1,11 @@
 import styled from "@emotion/styled"
 import { ROUTE_ABOUT, ROUTE_FILMS } from "../utils/routes"
+import { Link } from "react-router-dom"
+import React from "react"
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: #e34ac2;
+  background: #e7cde1;
   width: 20%;
 `
 export const NavBar = () => {
@@ -11,8 +13,8 @@ export const NavBar = () => {
     <Container>
       Navigation
       <nav>
-        <a href={ROUTE_ABOUT}>About</a>
-        <a href={ROUTE_FILMS}>Films</a>
+        <Link to={ROUTE_ABOUT}>About</Link>
+        <Link to={ROUTE_FILMS}>Films</Link>
       </nav>
     </Container>
   )
