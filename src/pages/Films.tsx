@@ -1,61 +1,38 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { PageContainer } from "./PageContainer"
-import styled from "@emotion/styled"
-import { Link } from "react-router-dom"
-import { ROUTE_FILMS } from "../utils/routes"
 import { PeopleBlock } from "../components/PeopleBlock"
-import React from "react"
-import { FilmType } from "../utils/types"
-const FilmCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: #f589dc;
-  padding: 30px;
-  min-width: 300px;
-  justify-content: space-between;
-`
-const FilmsBlock = styled.div`
-  display: flex;
-  background: #bdeb69;
-  gap: 20px;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  width: 80%;
-`
+import { FilmType, PeopleType } from "../utils/types"
+import { FilmsBlock } from "../components/Films/FilmsBlock"
+import { useParams } from "react-router-dom"
+
 export const Films = () => {
+  const { id } = useParams()
   const [films, setFilms] = useState<FilmType[]>([])
+  const [people, setPeople] = useState<PeopleType[]>([])
+  const [filmTitle, setFilmTitle] = useState("")
+
   useEffect(() => {
     fetch("https://swapi.dev/api/films")
       .then((res) => res.json())
       .then((data) => setFilms(data.results))
   }, [])
+
+  useEffect(() => {
+    if (id)
+      fetch(`https://swapi.dev/api/films/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFilmTitle(data.title)
+          const promises = data?.characters.map((link: string) =>
+            fetch(link).then((res) => res.json())
+          )
+          Promise.all(promises).then((values) => setPeople(values))
+        })
+  }, [id])
   return (
     <PageContainer>
-      <FilmsBlock>
-        {films.map((film) => (
-          <FilmCard key={film.episode_id}>
-            <FilmInformation>
-              <div>
-                <div>{film.title}</div>
-                <div>{film.release_date}</div>
-              </div>
-              <div>{film.episode_id}</div>
-            </FilmInformation>
-            <Link
-              to={`${ROUTE_FILMS}/${film.url.split("films/")[1]}`}
-              state={{ characters: film?.characters || undefined }}
-            >
-              Show People
-            </Link>
-          </FilmCard>
-        ))}
-      </FilmsBlock>
-      <PeopleBlock />
+      <FilmsBlock films={films} />
+      <PeopleBlock filmId={id} filmTitle={filmTitle} people={people} />
     </PageContainer>
   )
 }
-const FilmInformation = styled.div`
-  display: flex;
-  justify-content: space-between;
-  background: #89b2f5;
-`

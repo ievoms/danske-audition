@@ -1,59 +1,67 @@
-import { useEffect, useState } from "react"
-
-import styled from "@emotion/styled"
-import { useParams } from "react-router-dom"
-
 import React from "react"
 import { PeopleType } from "../utils/types"
+import { Container } from "./Container"
+import { Text } from "./Typography"
+import styled from "@emotion/styled"
 
-const Block = styled.div`
-  display: flex;
-  background: #516330;
-  gap: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  width: 80%;
+const Table = styled.table`
+  width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
 `
-
-export const PeopleBlock = () => {
-  const { id } = useParams()
-
-  const [people, setPeople] = useState<PeopleType[]>([])
-  const [filmTitle, setFilmTitle] = useState("")
-
-  useEffect(() => {
-    fetch(`https://swapi.dev/api/films/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setFilmTitle(data.title)
-        const promises = data?.characters.map((link: string) =>
-          fetch(link).then((res) => res.json())
-        )
-        Promise.all(promises).then((values) => setPeople(values))
-      })
-  }, [id])
-
+const THead = styled.thead`
+  text-align: left;
+  background-color: #89b2f5;
+`
+const TBody = styled.tbody`
+  width: 100%;
+`
+const Th = styled.th`
+  padding: 10px;
+`
+const Tr = styled.tr`
+  border-bottom: 1px solid #cfcfcf;
+`
+const Td = styled.td`
+  padding: 10px;
+`
+interface PeopleBlockProps {
+  filmId?: string
+  filmTitle: string
+  people: PeopleType[]
+}
+export const PeopleBlock = ({
+  filmId,
+  filmTitle,
+  people,
+}: PeopleBlockProps) => {
   return (
-    <Block>
-      <div>{filmTitle}</div>
-      <table>
-        <thead>
-          <th>Name</th>
-          <th>Birth Year</th>
-          <th>Gender</th>
-          <th>Mass</th>
-        </thead>
-        <tbody>
-          {people.map((item) => (
-            <tr key={`people-${item.birth_year}-${item.name}`}>
-              <td>{item.name}</td>
-              <td>{item.birth_year}</td>
-              <td>{item.gender}</td>
-              <td>{item.mass}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Block>
+    <>
+      {filmId ? (
+        <Container>
+          <Text bold>{filmTitle}</Text>
+          {!!people.length && (
+            <Table>
+              <THead>
+                <Th>Name</Th>
+                <Th>Birth Year</Th>
+                <Th>Gender</Th>
+                <Th>Mass</Th>
+              </THead>
+              <TBody>
+                {people.map((item) => (
+                  <Tr key={`people-${item.birth_year}-${item.name}`}>
+                    <Td>{item.name}</Td>
+                    <Td>{item.birth_year}</Td>
+                    <Td>{item.gender}</Td>
+                    <Td>{item.mass}</Td>
+                  </Tr>
+                ))}
+              </TBody>
+            </Table>
+          )}
+        </Container>
+      ) : null}
+    </>
   )
 }

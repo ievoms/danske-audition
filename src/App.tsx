@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 
-import { NavBar } from "./components/NavBar"
+import { NavBar } from "./components/Navigation/NavBar"
 
 function App() {
-  return <div>App</div>
+  return <></>
 }
 
 export default App

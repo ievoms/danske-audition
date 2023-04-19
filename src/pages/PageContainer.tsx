@@ -1,11 +1,21 @@
+import React from "react"
 import styled from "@emotion/styled"
-import { NavBar } from "../components/NavBar"
-import React, { useEffect, useState } from "react"
+import { NavBar } from "../components/Navigation/NavBar"
 
 const Container = styled.div`
   display: flex;
-  background: #e4facd;
   min-height: 100vh;
+  width: 100%;
+`
+const Navigation = styled(NavBar)`
+  width: 20%;
+`
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  background: #dadada8f;
 `
 
 interface PageContainerProps {
@@ -14,8 +24,8 @@ interface PageContainerProps {
 export const PageContainer = ({ children }: PageContainerProps) => {
   return (
     <Container>
-      <NavBar />
-      <div>{children}</div>
+      <Navigation />
+      <Wrapper>{children}</Wrapper>
     </Container>
   )
 }
